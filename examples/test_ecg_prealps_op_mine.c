@@ -25,7 +25,7 @@
 /* preAlps */
 #include "operator.h"
 #include "block_jacobi.h"
-#include "ecg.h"
+#include "overlap_ecg.h"
 
 /* Command line parser */
 #include <ctype.h>
@@ -198,20 +198,35 @@ CPLM_OPEN_TIMER
   int stop = 0;
   double* sol = NULL;
   sol = (double*) malloc(m*sizeof(double));
+
+  // weighting in the inner product (if no overlap, w := 1)
+  double* w = NULL;
+  w = (double*) malloc(m*sizeof(double));
+  for (int i=0; i < m; ++i) {
+    w[i] = 1.0;
+  }
+
+  // local indices to determine the splitting of the rhs into $enlFac vectors
+  int* glob_indices = NULL;
+  glob_indices = (int*) malloc(m*sizeof(int));
+  for (int i=0; i < m; ++i) {
+    glob_indices[i] = rank % enlFac;
+  }
+
 CPLM_TIC(step1,"ECGSolve")
   // Allocate memory and initialize variables
-  preAlps_ECGInitialize(&ecg,rhs,&rci_request);
+  preAlps_oECGInitialize(&ecg,rhs,&rci_request,glob_indices);
   // Finish initialization
   preAlps_BlockJacobiApply(ecg.R,ecg.P);
   preAlps_BlockOperator(ecg.P,ecg.AP);
   // Main loop
   while (stop != 1) {
-    preAlps_ECGIterate(&ecg,&rci_request);
+    preAlps_oECGIterate(&ecg,&rci_request,w);
     if (rci_request == 0) {
       preAlps_BlockOperator(ecg.P,ecg.AP);
     }
     else if (rci_request == 1) {
-      preAlps_ECGStoppingCriterion(&ecg,&stop);
+      preAlps_oECGStoppingCriterion(&ecg,&stop,w);
       if (stop == 1) break;
       if (ecg.ortho_alg == ORTHOMIN)
         preAlps_BlockJacobiApply(ecg.R,ecg.Z);
@@ -220,11 +235,11 @@ CPLM_TIC(step1,"ECGSolve")
     }
   }
   // Retrieve solution and free memory
-  preAlps_ECGFinalize(&ecg,sol);
+  preAlps_oECGFinalize(&ecg,sol);
 CPLM_TAC(step1)
 
   if (rank == 0) {
-    preAlps_ECGPrint(&ecg,5);
+    preAlps_oECGPrint(&ecg,0);
   }
 
   /*================ Finalize ================*/
@@ -240,3 +255,4 @@ CPLM_CLOSE_TIMER
   return 0;
 }
 /******************************************************************************/
+

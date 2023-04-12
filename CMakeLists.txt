@@ -83,6 +83,7 @@ INCLUDE_DIRECTORIES(${PREALPS_SOURCE_DIR}/src/preconditioners)
 INCLUDE_DIRECTORIES(${PREALPS_SOURCE_DIR}/utils)
 # Set source files
 SET(PREALPS_CORE ${PREALPS_SOURCE_DIR}/src/solvers/ecg.c
+${PREALPS_SOURCE_DIR}/src/solvers/overlap_ecg.c
 ${PREALPS_SOURCE_DIR}/src/preconditioners/block_jacobi.c
 ${PREALPS_SOURCE_DIR}/src/preconditioners/lorasc.c
 ${PREALPS_SOURCE_DIR}/src/preconditioners/lorasc_eigsolve.c

@@ -3,7 +3,7 @@
 #
 
 MKL_ROOT=/opt/intel/mkl
-METIS_ROOT=/usr/common/software/metis/5.1.0
+METIS_ROOT=/global/common/sw/cray/cnl7/haswell/metis/5.1.0/intel/19.0.3.199/kw3p5bh
 
 
 

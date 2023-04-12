@@ -9,7 +9,8 @@ PRECONDITIONERS_SRC = $(PREC_DIR)/block_jacobi.c \
 			# $(PREC_DIR)/presc.c \
 			# $(PREC_DIR)/presc_eigsolve.c
 
-SOLVERS_SRC = $(SOLVER_DIR)/ecg.c
+SOLVERS_SRC = $(SOLVER_DIR)/ecg.c\
+		$(SOLVER_DIR)/overlap_ecg.c
 
 PRECONDITIONERS_OBJ = $(PRECONDITIONERS_SRC:.c=.o)
 SOLVERS_OBJ = $(SOLVERS_SRC:.c=.o)

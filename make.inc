@@ -23,11 +23,11 @@ EXAMPLES     = examples
 #   Compilers
 #
 
-CC           = mpicc
+CC           = mpiicc
 CFLAGS       = -Wall -funroll-loops -std=c99 -fPIC
 OPT          = -O3 -march=native -mtune=native
-LOADER       = mpicc
-LOADOPTS     = -lgfortran -lm
+LOADER       = mpiicc
+LOADOPTS     = -lifcore -lm
 LD_FLAGS     = -lcplm_light -lcplm_v0 -lcplm_core
 
 USE_DEBUG=0
