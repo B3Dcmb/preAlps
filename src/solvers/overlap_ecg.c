@@ -244,7 +244,7 @@ CPLM_PUSH
   CPLM_DVector_t residual = CPLM_DVectorNULL();
   residual.nval = m;
   residual.val  = (double *) malloc(m*sizeof(double));
-  ierr = CPLM_MatDenseKernelSumColumns(R, &residual);CPLM_CHKERR(ierr);
+  ierr = CPLM_MatDenseKernelSumColumns(R, residual.val);CPLM_CHKERR(ierr);
 
   *res_p = 0.E0;
   for(int i = 0; i < m; i++) {
@@ -708,7 +708,7 @@ CPLM_PUSH
   sol.nval = X->info.m;
   sol.val  = solution;
   // Get the solution
-  ierr = CPLM_MatDenseKernelSumColumns(X, &sol);CPLM_CHKERR(ierr);
+  ierr = CPLM_MatDenseKernelSumColumns(X, sol.val);CPLM_CHKERR(ierr);
 CPLM_POP
   return ierr;
 }
@@ -813,4 +813,3 @@ return 0;
 
 
 /******************************************************************************/
-
